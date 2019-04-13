@@ -1,0 +1,22 @@
+{
+  "name": "@luckbox/redis",
+  "version": "1.0.0",
+  "description": "Provides a wrapper that handles some of the connection deficiencies of the \"redis\" 2.x.x package",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LuckboxGG/node-redis.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LuckboxGG/node-redis/issues"
+  },
+  "homepage": "https://github.com/LuckboxGG/node-redis#readme",
+  "dependencies": {
+    "redis": "^2.8.0"
+  }
+}
