@@ -5,23 +5,19 @@ const redis = require('redis');
  * Valdates options related to the heartbeat and sets defaults for missing ones
  * @param {Array} args
  */
-function processArgs(args) {
-  if (!args.length) {
-    args[0] = {};
-  }
-
+function processOptions(options) {
   const defaultOptions = {
     heartbeat_timeout: 1000,
     heartbeat_interval: 5000
   };
 
-  Object.assign(args[0], defaultOptions);
+  Object.assign(options, defaultOptions);
 
   for (const key in defaultOptions) {
-    assert(Number.isInteger(args[0][key]), `"${key}" must have an integer value in milliseconds`);
-    assert(args[0][key] > 0, `"${key}" must be a non-zero positive number`);
+    assert(Number.isInteger(options[key]), `"${key}" must have an integer value in milliseconds`);
+    assert(options[key] > 0, `"${key}" must be a non-zero positive number`);
   }
-  assert(args[0].heartbeat_interval > args[0].heartbeat_timeout, '"heartbeat_interval" must be larger than "heartbeat_timeout"');
+  assert(options.heartbeat_interval > options.heartbeat_timeout, '"heartbeat_interval" must be larger than "heartbeat_timeout"');
 }
 
 /**
@@ -65,18 +61,18 @@ class RedisClient extends redis.RedisClient {
   /**
    * @inheritdoc
    */
-  constructor(...args) {
-    processArgs(args);
-    super(...args);
+  constructor(options = {}, stream) {
+    processArgs(options);
+    super(options, stream);
     init(this);
   }
 
   /**
    * @inheritdoc
    */
-  duplicate(...args) {
-    processArgs(args);
-    const client = super.duplicate(...args);
+  duplicate(options = {}, callback) {
+    processArgs(options);
+    const client = super.duplicate(options, callback);
     Object.setPrototypeOf(client, RedisClient.prototype);
     return init(client);
   }
@@ -98,7 +94,12 @@ class RedisClient extends redis.RedisClient {
  */
 module.exports = Object.assign({}, redis, {
   createClient: (...args) => {
-    processArgs(args);
+    if (!args.length || typeof args[args.length - 1] !== 'object') {
+      args.push({});
+    }
+
+    const options = args[args.length - 1];
+    processOptions(options);
     const client = redis.createClient(...args);
     Object.setPrototypeOf(client, RedisClient.prototype);
     return init(client);

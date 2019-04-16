@@ -1,6 +1,6 @@
 {
   "name": "@luckbox/redis",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Provides a wrapper that handles some of the connection deficiencies of the \"redis\" 2.x.x package",
   "main": "index.js",
   "scripts": {
