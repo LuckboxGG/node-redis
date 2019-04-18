@@ -62,7 +62,7 @@ class RedisClient extends redis.RedisClient {
    * @inheritdoc
    */
   constructor(options = {}, stream) {
-    processArgs(options);
+    processOptions(options);
     super(options, stream);
     init(this);
   }
@@ -71,7 +71,7 @@ class RedisClient extends redis.RedisClient {
    * @inheritdoc
    */
   duplicate(options = {}, callback) {
-    processArgs(options);
+    processOptions(options);
     const client = super.duplicate(options, callback);
     Object.setPrototypeOf(client, RedisClient.prototype);
     return init(client);
